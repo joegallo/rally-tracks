@@ -7,6 +7,9 @@
           "operation": "delete-index"
         },
         {
+          "operation": "put-roles-and-users"
+        },
+        {
           "operation": {
             "operation-type": "create-index",
             "settings": {{index_settings | default({}) | tojson}}

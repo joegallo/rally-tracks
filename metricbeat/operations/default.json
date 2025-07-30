@@ -1,4 +1,8 @@
     {
+      "name": "put-roles-and-users",
+      "operation-type": "put-roles-and-users"
+    },
+    {
       "name": "index-append",
       "operation-type": "bulk",
       "bulk-size": {{bulk_size | default(10000)}},
