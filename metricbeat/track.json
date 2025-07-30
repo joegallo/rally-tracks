@@ -6,12 +6,25 @@
     {
       "name": "metricbeat",
       "body": "index.json"
+    },
+    {
+      "name": "metricbeat-1",
+      "body": "index.json"
+    },
+    {
+      "name": "metricbeat-2",
+      "body": "index.json"
+    },
+    {
+      "name": "metricbeat-3",
+      "body": "index.json"
     }
   ],
   "corpora": [
     {
       "name": "metricbeat",
       "base-url": "https://rally-tracks.elastic.co/metricbeat",
+      "target-index": "metricbeat",
       "documents": [
         {
           "source-file": "documents.json.bz2",

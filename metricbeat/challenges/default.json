@@ -35,6 +35,19 @@
           "operation": "refresh"
         },
         {
+          "operation": "reindex-metricbeat-1"
+        },
+        {
+          "operation": "reindex-metricbeat-2"
+        },
+        {
+          "operation": "reindex-metricbeat-3"
+        },
+        {
+          "name": "refresh-after-index-again",
+          "operation": "refresh"
+        },
+        {
           "operation": {
             "operation-type": "force-merge",
             "request-timeout": 7200
@@ -56,31 +69,6 @@
             "retry-until-success": true,
             "include-in-reporting": false
           }
-        },
-        {
-          "operation": "auto-date-histogram",
-          "warmup-iterations": 50,
-          "iterations": 100,
-          "target-throughput": 2
-        },
-        {
-          "operation": "auto-date-histogram-with-tz",
-          "warmup-iterations": 50,
-          "iterations": 100,
-          "target-throughput": 2
-        },
-        {
-          "operation": "date-histogram",
-          "warmup-iterations": 50,
-          "iterations": 100,
-          "target-throughput": 2
-        },
-        {
-          "operation": "date-histogram-with-tz",
-          "warmup-iterations": 50,
-          "iterations": 100,
-          "target-throughput": 2
         }
       ]
     }
-    
