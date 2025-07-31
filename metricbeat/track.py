@@ -59,6 +59,44 @@ def get_and_increment():
         counter += 1
     return result
 
+queries_and_aggs=[
+    [{"bool": {
+        "must": [
+            {"term": {"metricset.module": "system"}},
+            {"term": {"metricset.name": "core"}}
+        ]}},
+     {"core_system_pct": {
+         "percentiles": {"field": "system.core.system.pct"}}}],
+    [{"bool": {
+        "must": [
+            {"term": {"metricset.module": "system"}},
+            {"term": {"metricset.name": "network"}}
+        ]}},
+     {"network_in_bytes": {
+         "percentiles": {"field": "system.network.in.bytes"}}}],
+    [{"bool": {
+        "must": [
+            {"term": {"metricset.module": "system"}},
+            {"term": {"metricset.name": "process"}}
+        ]}},
+     {"processor_memory_size": {
+         "percentiles": {"field": "system.process.memory.size"}}}],
+    [{"bool": {
+        "must": [
+            {"term": {"metricset.module": "system"}},
+            {"term": {"metricset.name": "filesystem"}}
+        ]}},
+     {"filesystem_free": {
+         "percentiles": {"field": "system.filesystem.free"}}}],
+    [{"bool": {
+        "must": [
+            {"term": {"metricset.module": "system"}},
+            {"term": {"metricset.name": "memory"}}
+        ]}},
+     {"memory_total": {
+         "percentiles": {"field": "system.memory.total"}}}]
+]
+
 async def dls_search(es, params):
     c = get_and_increment()
 
@@ -68,80 +106,29 @@ async def dls_search(es, params):
     if c % 4 == 0:
         uid = 0
 
-    query = random.randint(0, 4)
+    qidx = random.randint(0, 4)
+    cost = random.randint(0, 10)
 
-    if query == 0:
-        await es.options(basic_auth=("user_" + str(uid), "password")).search(
-            size=0,
-            track_total_hits=True,
-            index="metricbeat*",
-            query={"bool": {
-                "must": [
-                    {"term": {"metricset.module": "system"}},
-                    {"term": {"metricset.name": "core"}}
-                ]
-            }},
-            aggs={"core_system_pct": {
-                "percentiles": {"field": "system.core.system.pct"}
-            }})
-    elif query == 1:
-        await es.options(basic_auth=("user_" + str(uid), "password")).search(
-            size=0,
-            track_total_hits=True,
-            index="metricbeat*",
-            query={"bool": {
-                "must": [
-                    {"term": {"metricset.module": "system"}},
-                    {"term": {"metricset.name": "network"}}
-                ]
-            }},
-            aggs={"network_in_bytes": {
-                "percentiles": {"field": "system.network.in.bytes"}
-            }})
-    elif query == 2:
-        await es.options(basic_auth=("user_" + str(uid), "password")).search(
-            size=0,
-            track_total_hits=True,
-            index="metricbeat*",
-            query={"bool": {
-                "must": [
-                    {"term": {"metricset.module": "system"}},
-                    {"term": {"metricset.name": "process"}}
-                ]
-            }},
-            aggs={"processor_memory_size": {
-                "percentiles": {"field": "system.process.memory.size"}
-            }})
-    elif query == 3:
-        await es.options(basic_auth=("user_" + str(uid), "password")).search(
-            size=0,
-            track_total_hits=True,
-            index="metricbeat*",
-            query={"bool": {
-                "must": [
-                    {"term": {"metricset.module": "system"}},
-                    {"term": {"metricset.name": "filesystem"}}
-                ]
-            }},
-            aggs={"filesystem_free": {
-                "percentiles": {"field": "system.filesystem.free"}
-            }})
-    elif query == 4:
-        await es.options(basic_auth=("user_" + str(uid), "password")).search(
-            size=0,
-            track_total_hits=True,
-            index="metricbeat*",
-            query={"bool": {
-                "must": [
-                    {"term": {"metricset.module": "system"}},
-                    {"term": {"metricset.name": "memory"}}
-                ]
-            }},
-            aggs={"memory_total": {
-                "percentiles": {"field": "system.memory.total"}
-            }})
-    else:
-        raise Exception("Invalid query!")
+    size = 0
+    track_total_hits=False
+    query = queries_and_aggs[qidx][0]
+    agg = queries_and_aggs[qidx][1]
+
+    if cost == 10:
+        size = 100
+
+    if cost >= 3:
+        track_total_hits=True
+
+    if cost <= 6:
+        agg = None
+
+    await es.options(basic_auth=("user_" + str(uid), "password")).search(
+        index="metricbeat*",
+        size=size,
+        track_total_hits=track_total_hits,
+        query=query,
+        aggs=agg)
 
 def register(registry):
     registry.register_runner("reindex", reindex, async_runner=True)
