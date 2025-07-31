@@ -72,6 +72,13 @@
             "retry-until-success": true,
             "include-in-reporting": false
           }
+        },
+        {
+          "name": "dls-search",
+          "operation": "dls-search",
+          "warmup-iterations": 1000,
+          "iterations": 4000,
+          "clients": 16
         }
       ]
     }

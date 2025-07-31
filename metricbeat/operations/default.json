@@ -25,4 +25,8 @@
       "operation-type": "reindex",
       "source-index": "metricbeat",
       "target-index": "metricbeat-3"
+    },
+    {
+      "name": "dls-search",
+      "operation-type": "dls-search"
     }
