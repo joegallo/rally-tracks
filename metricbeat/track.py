@@ -1,3 +1,4 @@
+import itertools
 import random
 import threading
 
@@ -14,8 +15,51 @@ async def reindex(es, params):
             timeout="300s"
           )
 
+oses = ["xenial", "trusty", "bionic", "debian", "redhat", "suse"]
+combinations = []
+for i in range(1, len(oses)+1):
+    combinations = combinations + list(itertools.combinations(oses, i))
+
 async def put_roles_and_users(es, params):
-    for os in ["debian", "redhat", "suse"]:
+    for codename in ["xenial", "trusty", "bionic"]:
+        await es.security.put_role(
+            name=codename,
+            indices=[
+                {
+                    'names': [ 'metricbeat*' ],
+                    'privileges': [ 'read' ],
+                    'query': {
+                        'bool': {
+                            'must': [
+                                { 'term': { 'host.os.family': "debian" } },
+                                { 'term': { 'host.os.platform': "ubuntu" } },
+                                { 'term': { 'host.os.codename': codename } }
+                            ]
+                        }
+                    }
+                }
+            ]
+        )
+    await es.security.put_role(
+        name="debian",
+        indices=[
+            {
+                'names': [ 'metricbeat*' ],
+                'privileges': [ 'read' ],
+                'query': {
+                    'bool': {
+                        'must': [
+                            { 'term': { 'host.os.family': "debian" } }
+                        ],
+                        'must_not': [
+                            { 'term': { 'host.os.platform': "ubuntu" } }
+                        ]
+                    }
+                }
+            }
+        ]
+    )
+    for os in ["redhat", "suse"]:
         await es.security.put_role(
             name=os,
             indices=[
@@ -33,15 +77,7 @@ async def put_roles_and_users(es, params):
             ]
         )
 
-    for idx, roles in enumerate([
-            ["debian"], # user_0
-            ["redhat"],
-            ["suse"],
-            ["debian","redhat"],
-            ["debian","suse"],
-            ["redhat","suse"],
-            ["debian","redhat","suse"] # user_6
-    ]):
+    for idx, roles in enumerate(combinations):
         await es.security.put_user(
             username="user_" + str(idx),
             password="password",
@@ -133,9 +169,9 @@ async def dls_search(es, params):
     c = get_and_increment()
 
     # we want some cache cycling, but also some entries that always just stay in the cache, so:
-    # 40% of the time, use user_0, 60% of the time, use user_1 through user_6
-    uid = random.randint(1, 6)
-    if c % 10 <= 4:
+    # 20% of the time, use user_0, the rest of the time, use user_1 through user_6
+    uid = random.randint(1, len(combinations)-1)
+    if c % 100 <= 20:
         uid = 0
 
     qidx = random.randint(0, 4)
