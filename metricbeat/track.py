@@ -42,7 +42,7 @@ async def put_roles_and_users(es, params):
             ["redhat","suse"],
             ["debian","redhat","suse"] # user_6
     ]):
-       await es.security.put_user(
+        await es.security.put_user(
             username="user_" + str(idx),
             password="password",
             roles=roles
