@@ -18,6 +18,22 @@
     {
       "name": "metricbeat-3",
       "body": "index.json"
+    },
+    {
+      "name": "metricbeat-4",
+      "body": "index.json"
+    },
+    {
+      "name": "metricbeat-5",
+      "body": "index.json"
+    },
+    {
+      "name": "metricbeat-6",
+      "body": "index.json"
+    },
+    {
+      "name": "metricbeat-7",
+      "body": "index.json"
     }
   ],
   "corpora": [

@@ -47,6 +47,18 @@
           "operation": "reindex-metricbeat-3"
         },
         {
+          "operation": "reindex-metricbeat-4"
+        },
+        {
+          "operation": "reindex-metricbeat-5"
+        },
+        {
+          "operation": "reindex-metricbeat-6"
+        },
+        {
+          "operation": "reindex-metricbeat-7"
+        },
+        {
           "name": "refresh-after-index-again",
           "operation": "refresh"
         },

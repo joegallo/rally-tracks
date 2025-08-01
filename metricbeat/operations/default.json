@@ -27,6 +27,30 @@
       "target-index": "metricbeat-3"
     },
     {
+      "name": "reindex-metricbeat-4",
+      "operation-type": "reindex",
+      "source-index": "metricbeat",
+      "target-index": "metricbeat-4"
+    },
+    {
+      "name": "reindex-metricbeat-5",
+      "operation-type": "reindex",
+      "source-index": "metricbeat",
+      "target-index": "metricbeat-5"
+    },
+    {
+      "name": "reindex-metricbeat-6",
+      "operation-type": "reindex",
+      "source-index": "metricbeat",
+      "target-index": "metricbeat-6"
+    },
+    {
+      "name": "reindex-metricbeat-7",
+      "operation-type": "reindex",
+      "source-index": "metricbeat",
+      "target-index": "metricbeat-7"
+    },
+    {
       "name": "dls-search",
       "operation-type": "dls-search"
     }
