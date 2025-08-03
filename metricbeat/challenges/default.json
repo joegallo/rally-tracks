@@ -90,7 +90,7 @@
           "operation": "dls-search",
           "warmup-iterations": 1000,
           "iterations": 4000,
-          "clients": 32
+          "clients": 128
         }
       ]
     }
