@@ -84,6 +84,22 @@ async def put_roles_and_users(es, params):
             roles=roles
         )
 
+async def delete_some_random_docs(es, params):
+    for idx in ["metricbeat", "metricbeat-1", "metricbeat-2", "metricbeat-3", "metricbeat-4", "metricbeat-5", "metricbeat-6", "metricbeat-7"]:
+        await es.delete_by_query(
+            index=idx,
+            query={
+                "function_score": {
+                    "query": {
+                        "match_all": {}
+                    },
+                    "random_score": {
+                    }
+                }
+            },
+            max_docs=50000
+        )
+
 counter = 0
 lock = threading.Lock()
 
@@ -200,6 +216,7 @@ async def dls_search(es, params):
 def register(registry):
     registry.register_runner("reindex", reindex, async_runner=True)
     registry.register_runner("put-roles-and-users", put_roles_and_users, async_runner=True)
+    registry.register_runner("delete-some-random-docs", delete_some_random_docs, async_runner=True)
     registry.register_runner("dls-search", dls_search, async_runner=True)
 
 def mandatory(params, key, op):

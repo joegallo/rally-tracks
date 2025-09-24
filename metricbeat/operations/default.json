@@ -51,6 +51,10 @@
       "target-index": "metricbeat-7"
     },
     {
+      "name": "delete-some-random-docs",
+      "operation-type": "delete-some-random-docs"
+    },
+    {
       "name": "dls-search",
       "operation-type": "dls-search"
     }

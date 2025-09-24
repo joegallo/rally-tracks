@@ -86,6 +86,9 @@
           }
         },
         {
+          "operation": "delete-some-random-docs"
+        },
+        {
           "name": "dls-search",
           "operation": "dls-search",
           "warmup-iterations": 1000,
